@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <h1>
+                Hello, {{ app.user.firstName | capitalize }} {{ app.user.lastName | capitalize }}
+            </h1>
+            <table>
+                <tr>
+                    <td>
+                        Email
+                    </td>
+                    <td>
+                        {{ app.user.email }}
+                    </td>
+                </tr>
+                    <tr>
+                        <td>
+                            Orders
+                        </td>
+                        <td>
+                            {{ app.user.orders | length }}
+                        </td>
+                    </tr>
+
+
+            </table>
+            <a href="{{ path('login') }}">
+                Sign in
+            </a>
+            <a href="{{ path('registration') }}">
+                Sign up
+            </a>
+            <li>
+                <a href="{{ path('order_new') }}">new</a>
+            </li>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Address</th>
+                    <th>Date</th>
+                    <th>Createdat</th>
+                    <th>Worker</th>
+                    <th>Price</th>
+        <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td><a href="{{ path('order_show', { 'id': order.id }) }}">{{ order.id }}</a></td>
+                        <td>{{ order.description }}</td>
+                        <td>{{ order.status }}</td>
+                        <td>{{ order.address }}</td>
+                        <td>{% if order.date %}{{ order.date|date('Y-m-d') }}{% endif %}</td>
+                        <td>{% if order.createdAt %}{{ order.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        <td>{% if order.worker %}{{ order.worker }}{% endif %}</td>
+                        <td>{% if order.price %}{{ order.price }}{% endif %}</td>
+                        <td>
+                            {% if order.status == 'pending' %}
+                                <div>
+                                    <a href="{{ path('order_confirm', { 'id': order.id, 'accepted': true }) }}">Accept</a>
+                                    <a href="{{ path('order_confirm', { 'id': order.id, 'accepted': false }) }}">Decline</a>
+                                </div>
+                            {% elseif order.status == 'accepted' %}
+                                <a href="{{ path('order_complete', { 'id': order.id }) }}">Complete</a>
+                            {% endif %}
+                            <ul>
+                                <li>
+                                    <a href="{{ path('order_show', { 'id': order.id }) }}">show</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('order_edit', { 'id': order.id }) }}">edit</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

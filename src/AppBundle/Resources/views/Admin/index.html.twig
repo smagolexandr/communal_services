@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <h1>
+                Welcome MR
+            </h1>
+            <a href="{{ path('login') }}">
+                Sign in
+            </a>
+            <a href="{{ path('registration') }}">
+                Sign up
+            </a>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Address</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td><a href="{{ path('order_show', { 'id': order.id }) }}">{{ order.id }}</a></td>
+                    <td>{{ order.description }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.address }}</td>
+                    <td>{% if order.date %}{{ order.date|date('Y-m-d') }}{% endif %}</td>
+                    <td>
+                        <ul>
+                            <li>
+                                <a href="{{ path('order_review', { 'id': order.id }) }}">Review</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
