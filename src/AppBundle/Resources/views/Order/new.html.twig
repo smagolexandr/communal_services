@@ -1,16 +1,61 @@
-{% extends 'base.html.twig' %}
+{% extends 'AppBundle::layout.html.twig' %}
 
-{% block body %}
-    <h1>Order creation</h1>
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col col-md-6">
+                <h1 class="text-center">Створення замовлення</h1>
+                {{ form_start(form) }}
+                <div class="form-group">
+                    <label>
+                        Опис
+                    </label>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    <label>
+                        Категорія
+                    </label>
 
-    <ul>
-        <li>
-            <a href="{{ path('user_index') }}">Back to the list</a>
-        </li>
-    </ul>
+                    {{ form_widget(form.category, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    <label>
+                        Адреса
+                    </label>
+
+                    {{ form_widget(form.address, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    <label>
+                        Дата
+                    </label>
+
+                    {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-check">
+                    <label class="form-check-label">
+                        {{ form_widget(form.ownMaterials, {'attr': {'class': 'form-check-input'}}) }}
+                        Власні матеріали
+                    </label>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">Зберегти</button>
+
+                <a class="btn btn-primary" href="
+                {% if is_granted('ROLE_ADMIN') %}
+                    {{ path('admin_index') }}
+                {% elseif is_granted('ROLE_USER') %}
+                    {{ path('user_index') }}
+                {% endif %}
+                ">Повернутись до списку</a>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
+

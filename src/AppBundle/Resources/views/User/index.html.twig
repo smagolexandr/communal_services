@@ -1,88 +1,75 @@
-{% extends 'base.html.twig' %}
+{% extends 'AppBundle::layout.html.twig' %}
 
-{% block body %}
-    <div class="container">
-        <div class="row">
-            <h1>
-                Hello, {{ app.user.firstName | capitalize }} {{ app.user.lastName | capitalize }}
-            </h1>
-            <table>
-                <tr>
-                    <td>
-                        Email
-                    </td>
-                    <td>
-                        {{ app.user.email }}
-                    </td>
-                </tr>
-                    <tr>
-                        <td>
-                            Orders
-                        </td>
-                        <td>
-                            {{ app.user.orders | length }}
-                        </td>
-                    </tr>
+{% block content %}
+    <dl class="row">
+        <dt class="col-sm-3">Ім'я</dt>
+        <dd class="col-sm-9"> {{ app.user.firstName | capitalize }}</dd>
 
+        <dt class="col-sm-3">Прізвище</dt>
+        <dd class="col-sm-9"> {{ app.user.lastName | capitalize }}</dd>
 
-            </table>
-            <a href="{{ path('login') }}">
-                Sign in
-            </a>
-            <a href="{{ path('registration') }}">
-                Sign up
-            </a>
-            <li>
-                <a href="{{ path('order_new') }}">new</a>
-            </li>
+        <dt class="col-sm-3">Пошта</dt>
+        <dd class="col-sm-9"> {{ app.user.email }}</dd>
 
-            <table>
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Address</th>
-                    <th>Date</th>
-                    <th>Createdat</th>
-                    <th>Worker</th>
-                    <th>Price</th>
-        <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for order in orders %}
-                    <tr>
-                        <td><a href="{{ path('order_show', { 'id': order.id }) }}">{{ order.id }}</a></td>
-                        <td>{{ order.description }}</td>
-                        <td>{{ order.status }}</td>
-                        <td>{{ order.address }}</td>
-                        <td>{% if order.date %}{{ order.date|date('Y-m-d') }}{% endif %}</td>
-                        <td>{% if order.createdAt %}{{ order.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-                        <td>{% if order.worker %}{{ order.worker }}{% endif %}</td>
-                        <td>{% if order.price %}{{ order.price }}{% endif %}</td>
-                        <td>
-                            {% if order.status == 'pending' %}
-                                <div>
-                                    <a href="{{ path('order_confirm', { 'id': order.id, 'accepted': true }) }}">Accept</a>
-                                    <a href="{{ path('order_confirm', { 'id': order.id, 'accepted': false }) }}">Decline</a>
-                                </div>
-                            {% elseif order.status == 'accepted' %}
-                                <a href="{{ path('order_complete', { 'id': order.id }) }}">Complete</a>
-                            {% endif %}
-                            <ul>
-                                <li>
-                                    <a href="{{ path('order_show', { 'id': order.id }) }}">show</a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('order_edit', { 'id': order.id }) }}">edit</a>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <dt class="col-sm-3">Замовлень</dt>
+        <dd class="col-sm-9">{{ app.user.orders | length }}</dd>
+    </dl>
+
+    <div class="pull-right">
+        <a class="btn btn-primary" href="{{ path('order_new') }}" role="button">Нове замовлення</a>
     </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Опис</th>
+            <th>Статус</th>
+            <th>Адреса</th>
+            <th>Дата виконання</th>
+            <th>Дата створення</th>
+            <th>Робітник</th>
+            <th>Ціна</th>
+            <th>Дії</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td><a href="{{ path('order_show', { 'id': order.id }) }}">{{ order.id }}</a></td>
+                <td>{{ order.description }}</td>
+                <td>
+                    {% if order.status == "new" %}
+                        Нове
+                    {% elseif order.status == "pending" %}
+                        Обробляеться
+                    {% elseif order.status == "accepted" %}
+                        Виконується
+                    {% elseif order.status == "completed" %}
+                        Виконане
+                    {% endif %}
+                </td>
+                <td>{{ order.address }}</td>
+                <td>{% if order.date %}{{ order.date|date('d.m.Y') }}{% endif %}</td>
+                <td>{% if order.createdAt %}{{ order.createdAt|date('d.m.Y') }}{% endif %}</td>
+                <td>{% if order.worker %}{{ order.worker }}{% endif %}</td>
+                <td>{% if order.price %}{{ order.price }}{% endif %}</td>
+                <td>
+                    {% if order.status == 'pending' %}
+                        <div>
+                            <a href="{{ path('order_confirm', { 'id': order.id, 'accepted': true }) }}"><i class="fa fa-check-circle" aria-hidden="true"></i></a>
+                            <a href="{{ path('order_confirm', { 'id': order.id, 'accepted': false }) }}"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+                        </div>
+                    {% elseif order.status == 'accepted' %}
+                        <div>
+                        <a href="{{ path('order_complete', { 'id': order.id }) }}">Завершити</a>
+                        </div>
+                    {% endif %}
+                    <a href="{{ path('order_show', { 'id': order.id }) }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a href="{{ path('order_edit', { 'id': order.id }) }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

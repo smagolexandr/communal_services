@@ -1,64 +1,68 @@
-{% extends 'base.html.twig' %}
+{% extends 'AppBundle::layout.html.twig' %}
 
-{% block body %}
-    <h1>Order</h1>
+{% block content %}
+    <h1>Замовлення</h1>
 
-    <table>
+    <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>#</th>
                 <td>{{ order.id }}</td>
             </tr>
             <tr>
-                <th>Description</th>
+                <th>Опис</th>
                 <td>{{ order.description }}</td>
             </tr>
             <tr>
-                <th>Comment</th>
-                <td>{{ order.comment }}</td>
+                <th>Статус</th>
+                <td>
+                    {% if order.status == "new" %}
+                        Нове
+                    {% elseif order.status == "pending" %}
+                        Обробляеться
+                    {% elseif order.status == "accepted" %}
+                        Виконується
+                    {% elseif order.status == "completed" %}
+                        Виконане
+                    {% endif %}
+                </td>
             </tr>
             <tr>
-                <th>Status</th>
-                <td>{{ order.status }}</td>
-            </tr>
-            <tr>
-                <th>Address</th>
+                <th>Адреса</th>
                 <td>{{ order.address }}</td>
             </tr>
             <tr>
-                <th>Date</th>
-                <td>{% if order.date %}{{ order.date|date('Y-m-d') }}{% endif %}</td>
+                <th>Дата виконання</th>
+                <td>{% if order.date %}{{ order.date|date('d.m.Y') }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Ownmaterials</th>
-                <td>{% if order.ownMaterials %}Yes{% else %}No{% endif %}</td>
+                <th>Використання власних матеріалів</th>
+                <td>{% if order.ownMaterials %}Так{% else %}Ні{% endif %}</td>
             </tr>
             <tr>
-                <th>Createdat</th>
-                <td>{% if order.createdAt %}{{ order.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <th>Створено</th>
+                <td>{% if order.createdAt %}{{ order.createdAt|date('d.m.Y H:i:s') }}{% endif %}</td>
             </tr>
-            <tr>
-                <th>Updatedat</th>
-                <td>{% if order.updatedAt %}{{ order.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Deletedat</th>
-                <td>{% if order.deletedAt %}{{ order.deletedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
+
+            {% if order.comment %}
+                <tr>
+                    <th>Відгук</th>
+                    <td>{{ order.comment }}</td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('user_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('order_edit', { 'id': order.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    <a class="btn btn-primary" href="
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ path('admin_index') }}
+    {% elseif is_granted('ROLE_USER') %}
+        {{ path('user_index') }}
+    {% endif %}
+    ">Повернутись до списку</a>
+    <a class="btn btn-primary" href="{{ path('order_edit', { 'id': order.id }) }}">Редагувати</a>
+    {{ form_start(delete_form) }}
+        <input class="btn btn-primary" type="submit" value="Видалити">
+    {{ form_end(delete_form) }}
+
 {% endblock %}

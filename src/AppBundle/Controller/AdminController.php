@@ -20,6 +20,20 @@ class AdminController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $orders = $em->getRepository(Order::class)->findAll();
+
+        return [
+            'orders' => $orders
+        ];
+    }
+
+    /**
+     * @Route("/order/reviews", name="admin_orders_reviews")
+     * @Template()
+     */
+    public function reviewListAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
         $orders = $em->getRepository(Order::class)->findBy(['status' => 'new']);
 
         return [
