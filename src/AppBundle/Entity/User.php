@@ -36,17 +36,30 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(type="string", length=20, unique=true)
+     * @Assert\Regex(
+     *     pattern="/^\+\d{5,15}$/"
+     * )
      * @Assert\NotBlank()
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Your firstname cannot contain a number"
+     * )
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Your lastname cannot contain a number"
+     * )
      */
     private $lastName;
 
