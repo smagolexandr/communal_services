@@ -40,6 +40,19 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         if ($request->query->get('accepted') == TRUE) {
             $order->setStatus(Order::STATUS_ACCEPTED);
+
+            $message = (new \Swift_Message('Hello Email'))
+                ->setFrom([$this->getParameter('mailer_user') => "TC service"])
+                ->setTo([$order->getWorker()->getEmail() => $order->getWorker()->getLastName() . " " . $order->getWorker()->getFirstName()])
+                ->setBody(
+                    $this->renderView(
+                    // templates/emails/registration.html.twig
+                        'AppBundle:Email:OrderAccepted.html.twig',
+                        ['order' => $order]
+                    ),
+                    'text/html'
+                );
+            $this->get('mailer')->send($message);
         } else {
             $em->remove($order);
         }

@@ -1,4 +1,5 @@
-communal_services
+Communal services
 =================
 
-A Symfony project created on November 20, 2017, 7:30 pm.
+Simple application for creating orders and process them.
+

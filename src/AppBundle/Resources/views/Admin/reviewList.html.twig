@@ -2,10 +2,12 @@
 
 {% block content %}
     <div class="container">
-        <h1>
-            Всі замовлення
-        </h1>
-        <hr>
+        <div class="row">
+            <h1>
+                Замовлення, що підлягають розгляду
+            </h1>
+        </div>
+
         <table class="table">
             <thead>
             <tr>
@@ -42,8 +44,7 @@
                     <td>{{ order.address }}</td>
                     <td>{% if order.date %}{{ order.date|date('d.m.Y') }}{% endif %}</td>
                     <td>
-                        <a href="{{ path('order_show', { 'id': order.id }) }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                        <a href="{{ path('order_edit', { 'id': order.id }) }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        <a href="{{ path('order_review', { 'id': order.id }) }}"><i class="fa fa-reply-all" aria-hidden="true"></i></a>
                     </td>
                 </tr>
             {% endfor %}

@@ -5,28 +5,33 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row text-center center-block">
-        <div class="col-sm-4 col-sm-offset-4">
-            <h1>
-                Welcome!
-            </h1>
-            <div class="well ">
 
-                {% if error %}
-                    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                {% endif %}
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col col-md-6 text-center">
+                <form class="form-signin" action="{{ path('login') }}" method="post">
+                    <h1>Вхід в систему</h1>
+                    {% if error %}
+                        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
 
-                <form action="{{ path('login') }}" method="post">
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" class="form-control" name="_username" value="{{ last_username }}" />
+                        <label for="username">Номер телефону</label>
+                        <input type="text" placeholder="+38 (0XX) XXX XX XXX" id="username" class="form-control"
+                               name="_username" value="{{ last_username }}"/>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" class="form-control" name="_password" />
+                        <label for="password">Пароль</label>
+                        <input type="password" id="password" class="form-control" name="_password"/>
                     </div>
-                    <input type="hidden" name="_target_path" value="" />
-                    <button type="submit" class="btn btn-success">Login <span class="glyphicon glyphicon-lock"></span></button>
+
+                    <a href="{{ path('homepage') }}" class="btn btn-success">
+                        <i class="fa fa-btn fa-home"></i> На головну
+                    </a>
+                    <a class="btn btn-success" href="{{ path('registration') }}">
+                        <i class="fa fa-btn fa-user"></i> Реєстрація
+                    </a>
+                    <button type="submit" class="btn btn-success"><i class="fa fa-sign-in" aria-hidden="true"></i> Увійти</button>
                 </form>
             </div>
         </div>

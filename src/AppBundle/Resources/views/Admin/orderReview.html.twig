@@ -1,16 +1,45 @@
-{% extends 'base.html.twig' %}
+{% extends 'AppBundle::layout.html.twig' %}
 
-{% block body %}
-    <h1>Order Review</h1>
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col col-md-6">
+                <h1 class="text-center">Розгляд замовлення</h1>
+                {{ form_start(form) }}
+                    <div class="form-group">
+                        <label>
+                            Категорія
+                        </label>
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input type="submit" value="Update" />
-    {{ form_end(form) }}
+                        {{ form_widget(form.category, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Опис
+                        </label>
 
-    <ul>
-        <li>
-            <a href="{{ path('admin_index') }}">Back to the list</a>
-        </li>
-    </ul>
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Опис Вашого замовлення'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Робітник
+                        </label>
+
+                        {{ form_widget(form.worker, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Ціна
+                        </label>
+
+                        {{ form_widget(form.price, {'attr': {'class': 'form-control', 'placeholder': '100'}}) }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Підтвердити</button>
+                    <a class="btn btn-primary" href="{{ path('admin_orders_reviews') }}">Повернутись до списку</a>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
